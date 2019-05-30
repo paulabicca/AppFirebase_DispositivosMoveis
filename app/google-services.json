@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "427641273875",
+    "firebase_url": "https://conexaoprojeto-fdb05.firebaseio.com",
+    "project_id": "conexaoprojeto-fdb05",
+    "storage_bucket": "conexaoprojeto-fdb05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427641273875:android:ad0af26ddfc74650",
+        "android_client_info": {
+          "package_name": "com.example.conexaofirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "427641273875-6svpl9du0nqfe41grgo5divhhhp7kmhv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqNR7SY9Qrqth39zh6aKjYQlUZIkBV9gY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "427641273875-6svpl9du0nqfe41grgo5divhhhp7kmhv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
