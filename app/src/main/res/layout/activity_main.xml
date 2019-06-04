@@ -22,10 +22,10 @@
         android:text="Salvar" />
 
     <Button
-        android:id="@+id/btnShow"
+        android:id="@+id/btnMostrar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mostrar Dados" />
+        android:text="Mostrar Lista" />
 
 </LinearLayout>
 

@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -18,14 +20,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText etAnotacao;
-    Button btnSalvar, btnShow;
-    DatabaseReference reff;
-    Anotacao anotacao;
-    long maxid = 0;
+    Button btnSalvar, btnMostrar;
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,31 +37,38 @@ public class MainActivity extends AppCompatActivity {
 
         etAnotacao = (EditText) findViewById(R.id.etAnotacao);
         btnSalvar = (Button) findViewById(R.id.btnSalvar);
-        btnShow = (Button) findViewById(R.id.btnShow);
-        anotacao = new Anotacao();//objeto
-        reff = FirebaseDatabase.getInstance().getReference().child("Anotacao"); //insere os dados no firebase
+        btnMostrar = (Button) findViewById(R.id.btnMostrar);
+
 
 
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                anotacao.setNome(etAnotacao.getText().toString().trim());
-                reff.push().setValue(anotacao);
-                Toast.makeText(MainActivity.this, "Anotacao salva com sucesso", Toast.LENGTH_SHORT).show();
-                anotacao.setNome("");
+                salvar();
+                limparCampos();
             }
         });
 
-        btnShow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ExibeActivity.class);
-                startActivity(intent);
-            }
-        });
 
     }
 
+    private void salvar() {
+        if(etAnotacao.length() == 0){
+            Toast.makeText(this, "Você deve digitar um nome", Toast.LENGTH_LONG).show();
+        }else{
+            Anotacao nota = new Anotacao();
+            nota.setNome(etAnotacao.getText().toString().trim());
+            database = FirebaseDatabase.getInstance();
+            reference = database.getReference();
+            reference.child("notas").push().setValue(nota);
+            Toast.makeText(this, "Nome adicionado com sucesso!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void limparCampos(){
+        etAnotacao.setText("");
+    }
 
 
 }
