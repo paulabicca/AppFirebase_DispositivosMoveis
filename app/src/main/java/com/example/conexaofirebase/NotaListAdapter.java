@@ -43,7 +43,6 @@ public class NotaListAdapter extends BaseAdapter   {
             convertView = inflater.inflate(R.layout.layout_nota_item,null);
             item = new Suporte();
             item.tvNomeAnotacao = (TextView) convertView.findViewById(R.id.tvNome);
-
             convertView.setTag(item);
         }else{
             item = (Suporte) convertView.getTag();
