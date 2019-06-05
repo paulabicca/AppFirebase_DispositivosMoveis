@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MostrarListaActivity extends AppCompatActivity {
@@ -38,7 +39,9 @@ public class MostrarListaActivity extends AppCompatActivity {
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                Anotacao nota = new Anotacao();
+                nota.setNome(dataSnapshot.child("nome").getValue(String.class) );
+                lista.add(nota);
             }
 
             @Override
@@ -61,12 +64,30 @@ public class MostrarListaActivity extends AppCompatActivity {
 
             }
         };
+        query.addChildEventListener( childEventListener );
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        query.removeEventListener( childEventListener );
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mostrar_lista);
+
+        lvLista = (ListView) findViewById(R.id.lvAnotacoes);
+
+        lista = new ArrayList<>();
+
+        carregarLista();
+    }
+
+    private void carregarLista(){
+        adapter = new NotaListAdapter(this, lista);
+        lvLista.setAdapter(adapter);
     }
 
 }

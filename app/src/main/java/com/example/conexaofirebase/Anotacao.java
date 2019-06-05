@@ -3,7 +3,6 @@ package com.example.conexaofirebase;
 public class Anotacao {
     private String nome;
 
-
     @Override
     public String toString() {
         return this.nome;
