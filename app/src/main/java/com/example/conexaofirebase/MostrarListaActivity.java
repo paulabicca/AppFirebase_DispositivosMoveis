@@ -1,9 +1,13 @@
 package com.example.conexaofirebase;
 
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -77,17 +81,39 @@ public class MostrarListaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mostrar_lista);
-
         lvLista = (ListView) findViewById(R.id.lvAnotacoes);
-
         lista = new ArrayList<>();
-
         carregarLista();
-    }
 
+        //excluir
+        lvLista.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final Anotacao notaSelecionada = lista.get(position); ///pega posição
+                AlertDialog.Builder alerta = new AlertDialog.Builder(MostrarListaActivity.this);
+                alerta.setTitle("Exclusão Anotação");
+                alerta.setMessage("Confirmar exclusão da anotação ?");
+                alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        carregarLista();
+                    }
+                });
+                alerta.setNeutralButton("Cancelar", null);
+                alerta.show();
+                return true;
+            }
+        });
+    }
     private void carregarLista(){
         adapter = new NotaListAdapter(this, lista);
         lvLista.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
 }
