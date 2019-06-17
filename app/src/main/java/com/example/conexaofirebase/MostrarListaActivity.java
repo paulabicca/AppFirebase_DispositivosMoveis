@@ -45,9 +45,9 @@ public class MostrarListaActivity extends AppCompatActivity {
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Anotacao nota = new Anotacao();
-                nota.setNome(dataSnapshot.child("nome").getValue(String.class) );
-                lista.add(nota);
+                //Anotacao nota = new Anotacao();
+                //nota.setNome(dataSnapshot.child("nome").getValue(String.class) );
+                //lista.add(nota);
             }
 
             @Override
@@ -97,8 +97,8 @@ public class MostrarListaActivity extends AppCompatActivity {
                 alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        deleteReference = FirebaseDatabase.getInstance().getReference().child("notas");
-                        deleteReference.removeValue();
+                        //deleteReference = FirebaseDatabase.getInstance().getReference().child("notas");
+                        //deleteReference.removeValue();
                         Toast.makeText(getApplicationContext(), "Deletado com sucesso", Toast.LENGTH_LONG).show();
 
                     }

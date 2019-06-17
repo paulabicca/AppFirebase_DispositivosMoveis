@@ -4,6 +4,13 @@ public class Anotacao {
     private String id;
     private String nome;
 
+
+    public Anotacao(String id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+
+
     @Override
     public String toString() {
         return this.nome;
