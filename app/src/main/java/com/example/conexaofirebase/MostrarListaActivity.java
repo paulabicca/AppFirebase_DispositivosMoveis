@@ -27,10 +27,7 @@ public class MostrarListaActivity extends AppCompatActivity {
     List<Anotacao> lista;
     NotaListAdapter adapter;
 
-
-    private FirebaseDatabase database;
-    private DatabaseReference reference, deleteReference;
-    private Query query;
+    private DatabaseReference databaseAnotacao;
     private ChildEventListener childEventListener;
 
     @Override
@@ -38,16 +35,14 @@ public class MostrarListaActivity extends AppCompatActivity {
         super.onStart();
 
         lista.clear();
-        database = FirebaseDatabase.getInstance();
-        reference = database.getReference();
-        query = reference.child("notas").orderByChild("nome");
+
 
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                //Anotacao nota = new Anotacao();
-                //nota.setNome(dataSnapshot.child("nome").getValue(String.class) );
-                //lista.add(nota);
+                Anotacao nota = new Anotacao();
+                nota.setNome(dataSnapshot.child("nome").getValue(String.class) );
+                lista.add(nota);
             }
 
             @Override
@@ -70,13 +65,13 @@ public class MostrarListaActivity extends AppCompatActivity {
 
             }
         };
-        query.addChildEventListener( childEventListener );
+        databaseAnotacao.addChildEventListener( childEventListener );
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        query.removeEventListener( childEventListener );
+        databaseAnotacao.removeEventListener( childEventListener );
     }
 
     @Override
@@ -86,6 +81,7 @@ public class MostrarListaActivity extends AppCompatActivity {
         lvLista = (ListView) findViewById(R.id.lvAnotacoes);
         lista = new ArrayList<>();
         carregarLista();
+        databaseAnotacao = FirebaseDatabase.getInstance().getReference("Anotacao");
 
         //excluir
         lvLista.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -97,8 +93,8 @@ public class MostrarListaActivity extends AppCompatActivity {
                 alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //deleteReference = FirebaseDatabase.getInstance().getReference().child("notas");
-                        //deleteReference.removeValue();
+                        databaseAnotacao = FirebaseDatabase.getInstance().getReference("Anotacao");
+                        databaseAnotacao.removeValue();
                         Toast.makeText(getApplicationContext(), "Deletado com sucesso", Toast.LENGTH_LONG).show();
 
                     }

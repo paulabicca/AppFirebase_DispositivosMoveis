@@ -10,6 +10,9 @@ public class Anotacao {
         this.nome = nome;
     }
 
+    public Anotacao() {
+
+    }
 
     @Override
     public String toString() {
