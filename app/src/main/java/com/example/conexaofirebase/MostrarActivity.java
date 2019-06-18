@@ -1,14 +1,18 @@
 package com.example.conexaofirebase;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -20,11 +24,11 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MostrarListaActivity extends AppCompatActivity {
+public class MostrarActivity extends AppCompatActivity {
 
     ListView lvLista;
     List<Anotacao> lista;
-    NotaListAdapter adapter;
+    AdapterAnotacao adapter;
 
     private FirebaseDatabase database;
     private DatabaseReference reference;
@@ -37,13 +41,18 @@ public class MostrarListaActivity extends AppCompatActivity {
 
         lista.clear();
 
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference();
+        query = reference.child("notas").orderByChild("nome");
 
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Anotacao nota = new Anotacao();
-                nota.setNome(dataSnapshot.child("nome").getValue(String.class) );
+                nota.setId(dataSnapshot.getKey());
+                nota.setNome(dataSnapshot.child("nome").getValue(String.class));
                 lista.add(nota);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -66,56 +75,57 @@ public class MostrarListaActivity extends AppCompatActivity {
 
             }
         };
-        databaseAnotacao.addChildEventListener( childEventListener );
+        query.addChildEventListener(childEventListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        databaseAnotacao.removeEventListener( childEventListener );
+        query.removeEventListener(childEventListener);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mostrar_lista);
-        lvLista = (ListView) findViewById(R.id.lvAnotacoes);
-        lista = new ArrayList<>();
-        carregarLista();
-        databaseAnotacao = FirebaseDatabase.getInstance().getReference("Anotacao");
+        setContentView(R.layout.activity_mostrar);
 
-        //excluir
+        lvLista = (ListView) findViewById(R.id.lvAnotacoes);
+
+        lista = new ArrayList<>();
+
+        carregarLista();
+
         lvLista.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final Anotacao notaSelecionada = lista.get(position); ///pega posição
-                AlertDialog.Builder alerta = new AlertDialog.Builder(MostrarListaActivity.this);
-                alerta.setTitle("Exclusão Anotação");
-                alerta.setMessage("Confirmar exclusão da anotação ?");
+                final Anotacao notaSelecionada = lista.get(position);
+                AlertDialog.Builder alerta = new AlertDialog.Builder(MostrarActivity.this);
+                alerta.setTitle("Edição de anotação");
+                alerta.setMessage("Você deseja editar a anotação " + notaSelecionada.getNome() + "?");
                 alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        deleteReference = FirebaseDatabase.getInstance().getReference().child("notas");
-                        deleteReference.removeValue();
-                        Toast.makeText(getApplicationContext(), "Deletado com sucesso", Toast.LENGTH_LONG).show();
-
+                        Intent intent = new Intent(MostrarActivity.this, AtualizarActivity.class);
+                        startActivity(intent);
                     }
                 });
-                alerta.setNeutralButton("Cancelar", null);
+
+                alerta.setNeutralButton("Não", null);
                 alerta.show();
                 return true;
             }
         });
+
     }
+
     private void carregarLista(){
-        adapter = new NotaListAdapter(this, lista);
+        adapter = new AdapterAnotacao(this, lista);
         lvLista.setAdapter(adapter);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
 }

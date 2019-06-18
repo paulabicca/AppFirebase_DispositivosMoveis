@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         btnMostrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MostrarListaActivity.class);
+                Intent intent = new Intent(MainActivity.this, MostrarActivity.class);
                 startActivity(intent);
             }
         });
@@ -65,11 +65,19 @@ public class MainActivity extends AppCompatActivity {
         if(etAnotacao.length() == 0){
             Toast.makeText(this, "Você deve digitar um nome", Toast.LENGTH_LONG).show();
         }else{
+
             Anotacao nota = new Anotacao();
             nota.setNome(etAnotacao.getText().toString().trim());
+
             database = FirebaseDatabase.getInstance();
             reference = database.getReference();
+
             reference.child("notas").push().setValue(nota);
+
+
+
+
+
             Toast.makeText(this, "Nome adicionado com sucesso!", Toast.LENGTH_SHORT).show();
         }
 
