@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         btnMostrar = (Button) findViewById(R.id.btnMostrar);
 
 
+
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,9 +69,7 @@ public class MainActivity extends AppCompatActivity {
             nota.setNome(etAnotacao.getText().toString().trim());
             database = FirebaseDatabase.getInstance();
             reference = database.getReference();
-
             reference.child("notas").push().setValue(nota);
-
             Toast.makeText(this, "Nome adicionado com sucesso!", Toast.LENGTH_SHORT).show();
         }
 

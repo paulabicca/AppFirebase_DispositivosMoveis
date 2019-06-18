@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -27,7 +26,9 @@ public class MostrarListaActivity extends AppCompatActivity {
     List<Anotacao> lista;
     NotaListAdapter adapter;
 
-    private DatabaseReference databaseAnotacao;
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
+    private Query query;
     private ChildEventListener childEventListener;
 
     @Override
@@ -87,14 +88,15 @@ public class MostrarListaActivity extends AppCompatActivity {
         lvLista.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final Anotacao notaSelecionada = lista.get(position); ///pega posição
                 AlertDialog.Builder alerta = new AlertDialog.Builder(MostrarListaActivity.this);
                 alerta.setTitle("Exclusão Anotação");
                 alerta.setMessage("Confirmar exclusão da anotação ?");
                 alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        databaseAnotacao = FirebaseDatabase.getInstance().getReference("Anotacao");
-                        databaseAnotacao.removeValue();
+                        deleteReference = FirebaseDatabase.getInstance().getReference().child("notas");
+                        deleteReference.removeValue();
                         Toast.makeText(getApplicationContext(), "Deletado com sucesso", Toast.LENGTH_LONG).show();
 
                     }
