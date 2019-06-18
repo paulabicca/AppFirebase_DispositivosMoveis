@@ -26,9 +26,9 @@ public class MainActivity extends AppCompatActivity {
 
     EditText etAnotacao;
     Button btnSalvar, btnMostrar;
-    /*private FirebaseDatabase database;
-    private DatabaseReference reference;*/
-    private DatabaseReference databaseAnotacao;
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         btnSalvar = (Button) findViewById(R.id.btnSalvar);
         btnMostrar = (Button) findViewById(R.id.btnMostrar);
 
-       databaseAnotacao = FirebaseDatabase.getInstance().getReference("Anotacao");
 
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,13 +64,12 @@ public class MainActivity extends AppCompatActivity {
         if(etAnotacao.length() == 0){
             Toast.makeText(this, "Você deve digitar um nome", Toast.LENGTH_LONG).show();
         }else{
+            Anotacao nota = new Anotacao();
+            nota.setNome(etAnotacao.getText().toString().trim());
+            database = FirebaseDatabase.getInstance();
+            reference = database.getReference();
 
-          String nome = etAnotacao.getText().toString().trim();
-          String id = databaseAnotacao.push().getKey(); //vai criar a chava primaria
-          Anotacao anotacao = new Anotacao(id,nome);
-          databaseAnotacao.child(id).setValue(anotacao);
-
-
+            reference.child("notas").push().setValue(nota);
 
             Toast.makeText(this, "Nome adicionado com sucesso!", Toast.LENGTH_SHORT).show();
         }
